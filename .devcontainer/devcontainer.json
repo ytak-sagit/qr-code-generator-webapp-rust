@@ -1,6 +1,8 @@
 {
     "name": "QR Code Generator WebApp by Rust",
-    "image": "mcr.microsoft.com/devcontainers/rust:latest",
+    "dockerFile": "./Dockerfile",
+    "context": "..",
+    "containerUser": "vscode",
     "customizations": {
         "vscode": {
             "extensions": [
