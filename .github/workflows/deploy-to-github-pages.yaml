@@ -1,0 +1,71 @@
+name: Deploy to Github Pages
+
+run-name: Deploy to Github Pages
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:  # NOTE: 手動でもデプロイできるようにしておく
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-Dwarnings"
+
+jobs:
+  build:
+    permissions:
+      contents: read
+
+    env:
+      REPOSITORY_NAME: ${{ github.event.repository.name }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install trunk
+        run: cargo install --lock trunk
+
+      - name: Add target for wasm
+        run: rustup target add wasm32-unknown-unknown
+
+      - name: Rust caching
+        uses: Swatinem/rust-cache@v2
+
+      - name: Build App
+        run: trunk build --release --minify --public-url ${{ env.REPOSITORY_NAME }}
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    needs: build
+    if: ${{ success() }}
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
