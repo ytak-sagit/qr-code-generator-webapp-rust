@@ -32,7 +32,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install trunk
-        run: cargo install --lock trunk
+        run: cargo install --locked trunk
 
       - name: Add target for wasm
         run: rustup target add wasm32-unknown-unknown
