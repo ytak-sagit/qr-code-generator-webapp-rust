@@ -22,6 +22,9 @@ jobs:
     permissions:
       contents: read
 
+    env:
+      REPOSITORY_NAME: ${{ github.event.repository.name }}
+
     runs-on: ubuntu-latest
 
     steps:
@@ -42,7 +45,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Build App
-        run: trunk build --release --minify
+        run: trunk build --release --minify --public-url ${{ env.REPOSITORY_NAME }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
