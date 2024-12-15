@@ -31,8 +31,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install trunk
-        run: cargo install --locked trunk
+      - name: Install trunk binary
+        run: cargo binstall trunk
 
       - name: Add target for wasm
         run: rustup target add wasm32-unknown-unknown
