@@ -32,7 +32,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Binstall
-        uses: cargo-bins/cargo-binstall@v1
+        uses: cargo-bins/cargo-binstall@9bc0ba964d12bf4c034d65ce732726a2b1a8d9df
 
       - name: Install trunk binary
         run: cargo binstall trunk
