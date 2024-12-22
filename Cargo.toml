@@ -1,7 +1,11 @@
+workspace = { members = [ "qr-code-wrapper" ] }
+
 [package]
 name = "qr-code-generator-webapp-rust"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+qr-code-wrapper = { path = "./qr-code-wrapper" }
+web-sys = "0.3.76"
 yew = { git = "https://github.com/yewstack/yew/", features = ["csr"] }
