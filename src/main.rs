@@ -27,8 +27,13 @@ fn app() -> Html {
                 <label>
                     {"Input URL:"}
                     // TODO: バリデーション
-                    // TODO: 入力文字数の制限
-                    <input ref={input_ref.clone()} type="url" placeholder="https://example.com" required=true />
+                    <input
+                        ref={input_ref.clone()}
+                        type="url"
+                        placeholder="https://example.com"
+                        required=true
+                        maxlength=2048
+                    />
                 </label>
                 <button type="submit">{"Generate QR Code"}</button>
             </form>
