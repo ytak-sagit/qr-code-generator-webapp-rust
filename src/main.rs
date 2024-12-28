@@ -50,10 +50,14 @@ struct QrCodeProps {
 #[function_component(QrCodeImage)]
 fn qr_code_image(props: &QrCodeProps) -> Html {
     let QrCodeProps { url } = props.clone();
-    let url = url.clone();
+
     if url.is_empty() {
-        // TODO: ここにQRコードが出力されることを示す、プレースホルダ画像を表示したい
-        return Html::default();
+        // TODO: 「ここに表示されます」のような文字列表示をしたい
+        return html! {
+            <>
+                <img src="public/placeholder.svg" alt="placeholder" />
+            </>
+        };
     }
 
     let base64_encoded_image_data =
