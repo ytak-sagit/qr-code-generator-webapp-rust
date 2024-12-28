@@ -37,7 +37,9 @@ fn app() -> Html {
                 </label>
                 <button type="submit">{"Generate QR Code"}</button>
             </form>
-            <QrCodeImage url={(*url_updator).clone()} />
+            <div>
+                <QrCodeImage url={(*url_updator).clone()} />
+            </div>
         </main>
     }
 }
@@ -50,10 +52,14 @@ struct QrCodeProps {
 #[function_component(QrCodeImage)]
 fn qr_code_image(props: &QrCodeProps) -> Html {
     let QrCodeProps { url } = props.clone();
-    let url = url.clone();
+
     if url.is_empty() {
-        // TODO: ここにQRコードが出力されることを示す、プレースホルダ画像を表示したい
-        return Html::default();
+        return html! {
+            <>
+                <p>{"QR code will be displayed below."}</p>
+                <img src="public/placeholder.svg" alt="placeholder" />
+            </>
+        };
     }
 
     let base64_encoded_image_data =
@@ -62,6 +68,10 @@ fn qr_code_image(props: &QrCodeProps) -> Html {
     // TODO: QRコードが表示されるまで loading 表示をしたい
     html! {
         <>
+            <p>
+                <img style="display: inline-block; width: 1.2em; height: 1.2em; vertical-align: middle;" src="public/icon-success.svg" alt="success" />
+                {"QR code was generated."}
+            </p>
             <img src={img} alt={&url} />
         </>
     }
