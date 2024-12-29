@@ -8,4 +8,5 @@ edition = "2021"
 [dependencies]
 qr-code-wrapper = { path = "./qr-code-wrapper" }
 web-sys = "0.3.76"
-yew = { git = "https://github.com/yewstack/yew/", features = ["csr"] }
+yew = { version = "0.21.0", features = ["csr"] }
+yew-hooks = "0.3.3"

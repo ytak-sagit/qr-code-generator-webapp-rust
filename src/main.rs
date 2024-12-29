@@ -1,6 +1,7 @@
 use qr_code_wrapper::*;
 use web_sys::HtmlInputElement;
 use yew::prelude::*;
+use yew_hooks::prelude::*;
 
 fn main() {
     yew::Renderer::<App>::new().render();
@@ -52,6 +53,7 @@ struct QrCodeProps {
 #[function_component(QrCodeImage)]
 fn qr_code_image(props: &QrCodeProps) -> Html {
     let QrCodeProps { url } = props.clone();
+    let clipboard = use_clipboard();
 
     if url.is_empty() {
         return html! {
@@ -61,6 +63,17 @@ fn qr_code_image(props: &QrCodeProps) -> Html {
             </>
         };
     }
+
+    // TODO: 変換処理が重複しているため共通化
+    let png_image_data =
+        qr_code_wrapper::to_png_to_vec_from_str(&url, QrCodeEcc::Low, 256).unwrap();
+    let onclick = {
+        let clipboard = clipboard.clone();
+        move |_| {
+            let png_image_data = png_image_data.clone();
+            clipboard.write(png_image_data, Some("image/png".to_owned()));
+        }
+    };
 
     let base64_encoded_image_data =
         qr_code_wrapper::to_png_to_base64_str_from_str(&url, QrCodeEcc::Low, 256).unwrap();
@@ -73,6 +86,7 @@ fn qr_code_image(props: &QrCodeProps) -> Html {
                 {"QR code was generated."}
             </p>
             <img src={img} alt={&url} />
+            <button onclick={onclick}>{"Copy to Clipboard"}</button>
         </>
     }
 }
