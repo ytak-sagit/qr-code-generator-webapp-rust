@@ -89,6 +89,8 @@ fn qr_code_image(props: &QrCodeProps) -> Html {
                 {"QR code was generated."}
             </p>
             <img src={img} alt={&url} />
+            // TODO: アイコンボタンにしたい
+            // <img onclick={onclick} style="display: inline-block; height: 1lh; vertical-align: middle; cursor: pointer;" src="public/icon-clipboard.svg" alt="copy to clipboard" />
             <button onclick={onclick}>{"Copy to Clipboard"}</button>
         </>
     }
