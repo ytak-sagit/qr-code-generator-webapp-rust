@@ -72,6 +72,9 @@ fn qr_code_image(props: &QrCodeProps) -> Html {
         move |_| {
             let png_image_data = png_image_data.clone();
             clipboard.write(png_image_data, Some("image/png".to_owned()));
+            // TODO: スナックバーのような形式でメッセージ表示したい
+            let window = web_sys::window().unwrap();
+            window.confirm_with_message("Copied!").unwrap();
         }
     };
 
