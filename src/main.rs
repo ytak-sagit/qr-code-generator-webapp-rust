@@ -1,6 +1,8 @@
-use qr_code_wrapper::*;
+use base64_wrapper::{engine::general_purpose::STANDARD, Engine};
+use qr_code_wrapper::{to_png_to_vec_from_str, QrCodeEcc};
 use web_sys::HtmlInputElement;
 use yew::prelude::*;
+use yew_hooks::prelude::*;
 
 fn main() {
     yew::Renderer::<App>::new().render();
@@ -52,6 +54,7 @@ struct QrCodeProps {
 #[function_component(QrCodeImage)]
 fn qr_code_image(props: &QrCodeProps) -> Html {
     let QrCodeProps { url } = props.clone();
+    let clipboard = use_clipboard();
 
     if url.is_empty() {
         return html! {
@@ -62,8 +65,20 @@ fn qr_code_image(props: &QrCodeProps) -> Html {
         };
     }
 
-    let base64_encoded_image_data =
-        qr_code_wrapper::to_png_to_base64_str_from_str(&url, QrCodeEcc::Low, 256).unwrap();
+    let png_image_data = to_png_to_vec_from_str(&url, QrCodeEcc::Low, 256).unwrap();
+    let onclick = {
+        let png_image_data = png_image_data.clone();
+        let clipboard = clipboard.clone();
+        move |_| {
+            let png_image_data = png_image_data.clone();
+            clipboard.write(png_image_data, Some("image/png".to_owned()));
+            // TODO: スナックバーのような形式でメッセージ表示したい
+            let window = web_sys::window().unwrap();
+            window.confirm_with_message("Copied!").unwrap();
+        }
+    };
+
+    let base64_encoded_image_data = STANDARD.encode(png_image_data.clone());
     let img = format!("data:image/png;base64,{}", base64_encoded_image_data);
     // TODO: QRコードが表示されるまで loading 表示をしたい
     html! {
@@ -73,6 +88,9 @@ fn qr_code_image(props: &QrCodeProps) -> Html {
                 {"QR code was generated."}
             </p>
             <img src={img} alt={&url} />
+            // TODO: アイコンボタンにしたい
+            // <img onclick={onclick} style="display: inline-block; height: 1lh; vertical-align: middle; cursor: pointer;" src="public/icon-clipboard.svg" alt="copy to clipboard" />
+            <button onclick={onclick}>{"Copy to Clipboard"}</button>
         </>
     }
 }
