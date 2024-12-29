@@ -1,4 +1,4 @@
-workspace = { members = [ "base64-wrapper", "qr-code-wrapper" ] }
+workspace = { members = ["base64-wrapper", "qr-code-wrapper"] }
 
 [package]
 name = "qr-code-generator-webapp-rust"
@@ -6,7 +6,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-base64-wrapper ={ path = "./base64-wrapper" }
+base64-wrapper = { path = "./base64-wrapper" }
 qr-code-wrapper = { path = "./qr-code-wrapper" }
 web-sys = "0.3.76"
 yew = { version = "0.21.0", features = ["csr"] }
