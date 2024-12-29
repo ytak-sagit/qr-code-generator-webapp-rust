@@ -1,4 +1,5 @@
-use qr_code_wrapper::*;
+use base64_wrapper::{engine::general_purpose::STANDARD, Engine};
+use qr_code_wrapper::{to_png_to_vec_from_str, QrCodeEcc};
 use web_sys::HtmlInputElement;
 use yew::prelude::*;
 use yew_hooks::prelude::*;
@@ -64,10 +65,9 @@ fn qr_code_image(props: &QrCodeProps) -> Html {
         };
     }
 
-    // TODO: 変換処理が重複しているため共通化
-    let png_image_data =
-        qr_code_wrapper::to_png_to_vec_from_str(&url, QrCodeEcc::Low, 256).unwrap();
+    let png_image_data = to_png_to_vec_from_str(&url, QrCodeEcc::Low, 256).unwrap();
     let onclick = {
+        let png_image_data = png_image_data.clone();
         let clipboard = clipboard.clone();
         move |_| {
             let png_image_data = png_image_data.clone();
@@ -78,8 +78,7 @@ fn qr_code_image(props: &QrCodeProps) -> Html {
         }
     };
 
-    let base64_encoded_image_data =
-        qr_code_wrapper::to_png_to_base64_str_from_str(&url, QrCodeEcc::Low, 256).unwrap();
+    let base64_encoded_image_data = STANDARD.encode(png_image_data.clone());
     let img = format!("data:image/png;base64,{}", base64_encoded_image_data);
     // TODO: QRコードが表示されるまで loading 表示をしたい
     html! {

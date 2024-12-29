@@ -1,7 +1,7 @@
 [package]
-name = "qr-code-wrapper"
+name = "base64-wrapper"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-qrcode-generator = "5.0.0"
+base64 = "0.22.1"
